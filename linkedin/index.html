@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Campaign Simulation — Superheat SmartWay™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sh-orange:#f26d17; --sh-amber:#ffb102; --ink:#121212; --muted:#5b5b63;
+    --line:#e3e3e8; --bg:#f1f2f4; --card:#ffffff;
+    --head:"Russo One","PT Sans",system-ui,sans-serif;
+    --body:"PT Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  h1,h2,h3{font-family:var(--head);font-weight:400}
+  a{color:inherit}
+
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+  .topbar .in{max-width:1100px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:18px}
+  .sim-badge{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:#8a4b12;background:#fff1e3;border:1px solid #ffd3ab;padding:4px 10px;border-radius:999px}
+  .tabs{display:flex;gap:4px;margin-left:auto}
+  .tabs button{font-family:var(--body);font-size:14px;font-weight:700;color:var(--muted);background:none;border:0;
+    padding:9px 16px;border-radius:8px;cursor:pointer}
+  .tabs button.on{color:var(--sh-orange);background:#fff4ec}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start}
+  @media (max-width:860px){.wrap{grid-template-columns:1fr}}
+
+  .profile{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:sticky;top:76px}
+  .profile .cover{height:58px;background:linear-gradient(120deg,#2a2a2e,#4a4a52)}
+  .profile .body{padding:0 16px 18px;text-align:center}
+  .profile .avatar{width:68px;height:68px;border-radius:50%;background:var(--sh-orange);color:#fff;border:3px solid #fff;
+    margin:-34px auto 10px;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:24px}
+  .profile h2{font-size:16px;font-family:var(--body);font-weight:700}
+  .profile .role{font-size:13.5px;color:var(--muted);margin-top:4px}
+  .profile .loc{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .profile .note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);text-align:left}
+
+  .feed{display:flex;flex-direction:column;gap:16px}
+  .post{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .post .head{display:flex;gap:11px;align-items:center;padding:14px 16px 0}
+  .post .brand{width:44px;height:44px;border-radius:8px;background:#000;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .post .brand img{width:34px;height:auto}
+  .post .who{font-size:14px;font-weight:700;line-height:1.3}
+  .post .meta{font-size:12px;color:var(--muted)}
+  .post .copy{padding:12px 16px 14px;font-size:14.5px}
+  .post .creative{background:#000;color:#fff;padding:26px 20px;display:flex;align-items:center;gap:18px;border-top:1px solid #000}
+  .post .creative img{height:26px;width:auto;flex:0 0 auto}
+  .post .creative .hl{font-family:var(--head);font-size:16px;line-height:1.3}
+  .post .cta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--line);background:#fafafb}
+  .post .cta .label{font-size:13px;color:var(--muted)}
+  .btn{display:inline-block;background:var(--sh-orange);color:#fff;border:2px solid #fff;border-radius:8px;
+    padding:9px 20px;font-family:var(--body);font-size:14.5px;font-weight:700;cursor:pointer;text-decoration:none}
+  .btn:hover{filter:brightness(1.08)}
+
+  /* DMs */
+  .dm{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .dm .head{display:flex;gap:11px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .dm .av{width:40px;height:40px;border-radius:50%;background:#2a2a2e;color:#fff;display:flex;align-items:center;
+    justify-content:center;font-family:var(--head);font-size:14px;flex:0 0 auto}
+  .dm .sponsored{margin-left:auto;font-size:11px;color:var(--muted)}
+  .dm .msg{padding:16px;font-size:14.5px}
+  .dm .msg a.inline{color:var(--sh-orange);font-weight:700;text-decoration:none}
+  .dm .msg .macro{background:#fff1e3;border-radius:4px;padding:0 3px;font-weight:700}
+  .dm .cta{padding:0 16px 16px}
+
+  /* inspector */
+  .insp{border-top:1px dashed var(--line);background:#fcfcfd;padding:11px 16px 13px;font-size:11.5px;color:var(--muted)}
+  .insp .t{font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:10px;color:var(--sh-orange);margin-bottom:5px}
+  .insp code{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;word-break:break-all;display:block;
+    background:#141418;color:#e8e8ee;padding:7px 9px;border-radius:6px;margin:3px 0 7px;line-height:1.5}
+  .insp code .m{color:#ffb86b}
+  .insp code .v{color:#a9d6ff}
+  .insp .notpassed{color:#b23b3b;font-weight:700}
+  .panel{display:none}
+  .panel.on{display:block}
+  .legend{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted);margin-bottom:16px}
+  .legend b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="in">
+    <span class="sim-badge">Simulation</span>
+    <strong style="font-size:14px">Superheat paid campaign preview</strong>
+    <div class="tabs">
+      <button id="tabFeed" class="on" onclick="show('feed')">Feed</button>
+      <button id="tabMsg" onclick="show('msg')">Messaging</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <aside class="profile">
+    <div class="cover"></div>
+    <div class="body">
+      <div class="avatar">AK</div>
+      <h2>Alex Kinjerski</h2>
+      <div class="role">Senior Director of Operations<br>Valero Energy Inc.</div>
+      <div class="loc">Port Arthur, TX</div>
+      <div class="note">Simulated member, matching the targeting snips: company list, job titles, and US / Canada / UK locations.</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="legend">
+      <b>What this shows:</b> the same three campaign themes as an ad and as a direct message. The DM text resolves the
+      member macros, the <b>link does not</b> — open the inspector under each item to see exactly what reaches the landing page.
+    </div>
+
+    <!-- ============ FEED ============ -->
+    <div id="feed" class="panel on">
+      <div class="feed">
+
+        <article class="post">
+          <div class="head">
+            <div class="brand"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></div>
+            <div><div class="who">Superheat</div><div class="meta">Promoted</div></div>
+          </div>
+          <p class="copy">Turnaround windows don't stretch. Your PWHT schedule shouldn't have to. Superheat SmartWay™ runs heat cycles remotely from our SmartCenter™, with live weld status in SmartView™ throughout the outage.</p>
+          <div class="creative">
+            <img src="../assets/services-logos.svg#t-smartway" alt="SmartWay">
+            <div class="hl">Heat treatment built for turnaround season</div>
+          </div>
+          <div class="cta">
+            <span class="label">superheat.com</span>
+            <a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Turnaround&utm_content=Post_TurnaroundSchedule&li_cid=714829301&li_crid=320114507&demo=true">Learn more</a>
+          </div>
+          <div class="insp">
+            <div class="t">Link inspector</div>
+            Template: <code>/smartway-solutions/?utm_source=linkedin&amp;utm_medium=paid_social&amp;utm_campaign=<span class="m">{{CAMPAIGN_NAME}}</span>&amp;utm_content=<span class="m">{{CREATIVE_NAME}}</span>&amp;li_cid=<span class="m">{{CAMPAIGN_ID}}</span>&amp;li_crid=<span class="m">{{CREATIVE_ID}}</span></code>
+            Resolves to: <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">paid_social</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Turnaround</span>&amp;utm_content=<span class="v">Post_TurnaroundSchedule</span>&amp;li_cid=<span class="v">714829301</span>&amp;li_crid=<span class="v">320114507</span></code>
+            <span class="notpassed">Not passed: name, title, company.</span>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="head">
+            <div class="brand"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></div>
+            <div><div class="who">Superheat</div><div class="meta">Promoted</div></div>
+          </div>
+          <p class="copy">Routine maintenance shouldn't mean more people in the unit. SmartWay™ operates heat treatment equipment remotely, so your crew sees every cycle live without extra field labour.</p>
+          <div class="creative">
+            <img src="../assets/services-logos.svg#t-smartcenter" alt="SmartCenter">
+            <div class="hl">Remote-controlled heat treatment for planned maintenance</div>
+          </div>
+          <div class="cta">
+            <span class="label">superheat.com</span>
+            <a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Maintenance&utm_content=Post_RemoteOperation&li_cid=714829302&li_crid=320114511&demo=true">Learn more</a>
+          </div>
+          <div class="insp">
+            <div class="t">Link inspector</div>
+            Template: <code>/smartway-solutions/?utm_source=linkedin&amp;utm_medium=paid_social&amp;utm_campaign=<span class="m">{{CAMPAIGN_NAME}}</span>&amp;utm_content=<span class="m">{{CREATIVE_NAME}}</span>&amp;li_cid=<span class="m">{{CAMPAIGN_ID}}</span>&amp;li_crid=<span class="m">{{CREATIVE_ID}}</span></code>
+            Resolves to: <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">paid_social</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Maintenance</span>&amp;utm_content=<span class="v">Post_RemoteOperation</span>&amp;li_cid=<span class="v">714829302</span>&amp;li_crid=<span class="v">320114511</span></code>
+            <span class="notpassed">Not passed: name, title, company.</span>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="head">
+            <div class="brand"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></div>
+            <div><div class="who">Superheat</div><div class="meta">Promoted</div></div>
+          </div>
+          <p class="copy">One provider, one QA trail. SmartWay™ combines remote equipment operation, digital project tracking and a downloadable SmartReport™ QA package for every job.</p>
+          <div class="creative">
+            <img src="../assets/services-logos.svg#t-smartreports" alt="SmartReport">
+            <div class="hl">Turnkey heat treatment with QA built in</div>
+          </div>
+          <div class="cta">
+            <span class="label">superheat.com</span>
+            <a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_QA&utm_content=Post_QAPackage&li_cid=714829303&li_crid=320114519&demo=true">Learn more</a>
+          </div>
+          <div class="insp">
+            <div class="t">Link inspector</div>
+            Template: <code>/smartway-solutions/?utm_source=linkedin&amp;utm_medium=paid_social&amp;utm_campaign=<span class="m">{{CAMPAIGN_NAME}}</span>&amp;utm_content=<span class="m">{{CREATIVE_NAME}}</span>&amp;li_cid=<span class="m">{{CAMPAIGN_ID}}</span>&amp;li_crid=<span class="m">{{CREATIVE_ID}}</span></code>
+            Resolves to: <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">paid_social</span>&amp;utm_campaign=<span class="v">SH_SmartWay_QA</span>&amp;utm_content=<span class="v">Post_QAPackage</span>&amp;li_cid=<span class="v">714829303</span>&amp;li_crid=<span class="v">320114519</span></code>
+            <span class="notpassed">Not passed: name, title, company.</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ============ MESSAGING ============ -->
+    <div id="msg" class="panel">
+      <div class="feed">
+
+        <article class="dm">
+          <div class="head">
+            <div class="av">DS</div>
+            <div><div class="who" style="font-size:14px;font-weight:700">Dylan Sayle</div>
+                 <div class="meta" style="font-size:12px;color:var(--muted)">Marketing Manager, Superheat</div></div>
+            <span class="sponsored">Sponsored message</span>
+          </div>
+          <p class="msg">Hi <span class="macro">Alex</span>, turnaround planning at <span class="macro">Valero</span> usually squeezes preheat and PWHT into the same window as everything else. SmartWay™ runs those heat cycles remotely from our <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Turnaround&utm_content=DM_Turnaround_v1&demo=true">SmartCenter™</a>, so your team tracks live weld status without extra people in the unit. Worth two minutes before your next outage?</p>
+          <div class="cta"><a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Turnaround&utm_content=DM_Turnaround_v1&demo=true">See how SmartWay works</a></div>
+          <div class="insp">
+            <div class="t">Link inspector</div>
+            Message macros resolved in the text: <b>Alex</b>, <b>Valero</b>.
+            Link (static): <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">sponsored_message</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Turnaround</span>&amp;utm_content=<span class="v">DM_Turnaround_v1</span></code>
+            <span class="notpassed">Not passed: name, title, company.</span>
+          </div>
+        </article>
+
+        <article class="dm">
+          <div class="head">
+            <div class="av">DS</div>
+            <div><div class="who" style="font-size:14px;font-weight:700">Dylan Sayle</div>
+                 <div class="meta" style="font-size:12px;color:var(--muted)">Marketing Manager, Superheat</div></div>
+            <span class="sponsored">Sponsored message</span>
+          </div>
+          <p class="msg">Hi <span class="macro">Alex</span>, as <span class="macro">Senior Director of Operations</span> at <span class="macro">Valero</span> you'll know how much field labour heat treatment ties up during routine maintenance. SmartWay™ operates the equipment remotely and shows every cycle live in <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Maintenance&utm_content=DM_Maintenance_v1&demo=true">SmartView™</a>. Want a quick look at how it fits your maintenance plan?</p>
+          <div class="cta"><a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Maintenance&utm_content=DM_Maintenance_v1&demo=true">See how SmartWay works</a></div>
+          <div class="insp">
+            <div class="t">Link inspector</div>
+            Message macros resolved in the text: <b>Alex</b>, <b>Senior Director of Operations</b>, <b>Valero</b>.
+            Link (static): <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">sponsored_message</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Maintenance</span>&amp;utm_content=<span class="v">DM_Maintenance_v1</span></code>
+            <span class="notpassed">Not passed: name, title, company.</span>
+          </div>
+        </article>
+
+        <article class="dm">
+          <div class="head">
+            <div class="av">DS</div>
+            <div><div class="who" style="font-size:14px;font-weight:700">Dylan Sayle</div>
+                 <div class="meta" style="font-size:12px;color:var(--muted)">Marketing Manager, Superheat</div></div>
+            <span class="sponsored">Sponsored message</span>
+          </div>
+          <p class="msg">Hi <span class="macro">Alex</span>, choosing a heat treatment provider for <span class="macro">Valero</span> means weighing cost, risk and QA evidence together. SmartWay™ covers all three in one turnkey service, with a downloadable <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_QA&utm_content=DM_QA_v1&demo=true">SmartReport™</a> QA package at close-out. Shall I show you how a job is scoped?</p>
+          <div class="cta"><a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_QA&utm_content=DM_QA_v1&demo=true">See how SmartWay works</a></div>
+          <div class="insp">
+            <div class="t">Link inspector</div>
+            Message macros resolved in the text: <b>Alex</b>, <b>Valero</b>.
+            Link (static): <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">sponsored_message</span>&amp;utm_campaign=<span class="v">SH_SmartWay_QA</span>&amp;utm_content=<span class="v">DM_QA_v1</span></code>
+            <span class="notpassed">Not passed: name, title, company.</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function show(which){
+  document.getElementById('feed').classList.toggle('on', which==='feed');
+  document.getElementById('msg').classList.toggle('on', which==='msg');
+  document.getElementById('tabFeed').classList.toggle('on', which==='feed');
+  document.getElementById('tabMsg').classList.toggle('on', which==='msg');
+}
+</script>
+</body>
+</html>
