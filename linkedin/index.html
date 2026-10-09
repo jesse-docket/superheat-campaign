@@ -5,183 +5,304 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Campaign Simulation — Superheat SmartWay™</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --sh-orange:#f26d17; --sh-amber:#ffb102; --ink:#121212; --muted:#5b5b63;
-    --line:#e3e3e8; --bg:#f1f2f4; --card:#ffffff;
-    --head:"Russo One","PT Sans",system-ui,sans-serif;
-    --body:"PT Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --li-bg:#f4f2ee; --li-card:#ffffff; --li-border:rgba(0,0,0,.08);
+    --li-blue:#0a66c2; --li-ink:rgba(0,0,0,.9); --li-mut:rgba(0,0,0,.6); --li-mut2:rgba(0,0,0,.45);
+    --li-prev:#edf3f8; --sh-orange:#f26d17;
+    --ui:-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
-  h1,h2,h3{font-family:var(--head);font-weight:400}
-  a{color:inherit}
+  body{font-family:var(--ui);background:var(--li-bg);color:var(--li-ink);font-size:14px;line-height:1.45}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit}
 
-  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-  .topbar .in{max-width:1100px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:18px}
-  .sim-badge{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-    color:#8a4b12;background:#fff1e3;border:1px solid #ffd3ab;padding:4px 10px;border-radius:999px}
-  .tabs{display:flex;gap:4px;margin-left:auto}
-  .tabs button{font-family:var(--body);font-size:14px;font-weight:700;color:var(--muted);background:none;border:0;
-    padding:9px 16px;border-radius:8px;cursor:pointer}
-  .tabs button.on{color:var(--sh-orange);background:#fff4ec}
+  /* ---- top nav ---- */
+  .nav{background:#fff;border-bottom:1px solid var(--li-border);position:sticky;top:0;z-index:30;height:52px}
+  .nav .in{max-width:1128px;margin:0 auto;padding:0 16px;height:52px;display:flex;align-items:center;gap:8px}
+  .logo{width:34px;height:34px;border-radius:4px;background:var(--li-blue);color:#fff;font-weight:800;font-size:19px;
+    display:flex;align-items:center;justify-content:center;letter-spacing:-.04em;flex:0 0 auto}
+  .search{background:#edf3f8;border-radius:4px;height:34px;width:260px;display:flex;align-items:center;padding:0 10px;
+    color:var(--li-mut2);font-size:13px;gap:7px}
+  .navitems{margin-left:auto;display:flex;gap:4px;align-items:stretch;height:52px}
+  .navitem{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:74px;
+    color:var(--li-mut);font-size:11.5px;border-bottom:2px solid transparent;cursor:pointer;background:none;border-top:0;border-left:0;border-right:0}
+  .navitem svg{width:22px;height:22px;fill:currentColor}
+  .navitem.on{color:var(--li-ink);border-bottom-color:var(--li-ink)}
+  .simbadge{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#8a4b12;
+    background:#fff1e3;border:1px solid #ffd3ab;padding:3px 9px;border-radius:999px;margin-left:10px;flex:0 0 auto}
 
-  .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start}
-  @media (max-width:860px){.wrap{grid-template-columns:1fr}}
+  /* ---- layout ---- */
+  .wrap{max-width:1128px;margin:0 auto;padding:22px 16px 60px;display:grid;grid-template-columns:225px minmax(0,1fr) 300px;gap:24px;align-items:start}
+  @media (max-width:1100px){.wrap{grid-template-columns:225px minmax(0,1fr)}}
+  @media (max-width:800px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--li-card);border:1px solid var(--li-border);border-radius:8px;overflow:hidden}
 
-  .profile{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:sticky;top:76px}
-  .profile .cover{height:58px;background:linear-gradient(120deg,#2a2a2e,#4a4a52)}
-  .profile .body{padding:0 16px 18px;text-align:center}
-  .profile .avatar{width:68px;height:68px;border-radius:50%;background:var(--sh-orange);color:#fff;border:3px solid #fff;
-    margin:-34px auto 10px;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:24px}
-  .profile h2{font-size:16px;font-family:var(--body);font-weight:700}
-  .profile .role{font-size:13.5px;color:var(--muted);margin-top:4px}
-  .profile .loc{font-size:12.5px;color:var(--muted);margin-top:8px}
-  .profile .note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);text-align:left}
+  /* ---- left profile ---- */
+  .me{position:sticky;top:74px}
+  .me .cover{height:56px;background:linear-gradient(120deg,#1b1f23,#434a52)}
+  .me .body{padding:0 12px 14px;text-align:center}
+  .me .av{width:72px;height:72px;border-radius:50%;background:var(--sh-orange);color:#fff;border:2px solid #fff;
+    margin:-36px auto 9px;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:600}
+  .me h2{font-size:16px;font-weight:600;line-height:1.3}
+  .me .role{font-size:12px;color:var(--li-mut);margin-top:3px}
+  .me .loc{font-size:12px;color:var(--li-mut2);margin-top:6px}
+  .me .stats{border-top:1px solid var(--li-border);margin-top:12px;padding-top:10px;text-align:left}
+  .me .stats div{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--li-mut)}
+  .me .stats b{color:var(--li-blue)}
+  .sidenote{font-size:11.5px;color:var(--li-mut2);padding:10px 12px;line-height:1.5}
 
-  .feed{display:flex;flex-direction:column;gap:16px}
-  .post{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .post .head{display:flex;gap:11px;align-items:center;padding:14px 16px 0}
-  .post .brand{width:44px;height:44px;border-radius:8px;background:#000;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  .post .brand img{width:34px;height:auto}
-  .post .who{font-size:14px;font-weight:700;line-height:1.3}
-  .post .meta{font-size:12px;color:var(--muted)}
-  .post .copy{padding:12px 16px 14px;font-size:14.5px}
-  .post .creative{background:#000;color:#fff;padding:26px 20px;display:flex;align-items:center;gap:18px;border-top:1px solid #000}
-  .post .creative img{height:26px;width:auto;flex:0 0 auto}
-  .post .creative .hl{font-family:var(--head);font-size:16px;line-height:1.3}
-  .post .cta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--line);background:#fafafb}
-  .post .cta .label{font-size:13px;color:var(--muted)}
-  .btn{display:inline-block;background:var(--sh-orange);color:#fff;border:2px solid #fff;border-radius:8px;
-    padding:9px 20px;font-family:var(--body);font-size:14.5px;font-weight:700;cursor:pointer;text-decoration:none}
-  .btn:hover{filter:brightness(1.08)}
+  /* ---- feed ---- */
+  .feed{display:flex;flex-direction:column;gap:8px}
+  .post{padding-bottom:4px}
+  .post .head{display:flex;gap:8px;padding:12px 16px 0;align-items:flex-start}
+  .post .brand{width:48px;height:48px;border-radius:4px;background:#000;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .post .brand img{width:38px;height:auto}
+  .post .who{font-size:14px;font-weight:600;line-height:1.3}
+  .post .sub{font-size:12px;color:var(--li-mut2);line-height:1.35}
+  .post .dots{margin-left:auto;color:var(--li-mut2);font-size:20px;line-height:1;letter-spacing:1px;cursor:default}
+  .post .copy{padding:10px 16px 12px;font-size:14px;white-space:pre-line}
+  .post .copy .tag{color:var(--li-blue)}
+  .post .creative{display:block;background:#000;position:relative}
+  .post .creative .art{height:188px;display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 24px;
+    background:linear-gradient(120deg,#101214,#2a2f34)}
+  .post .creative .art img{height:30px;width:auto;flex:0 0 auto}
+  .post .creative .art .hl{color:#fff;font-size:19px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+  /* LinkedIn link preview bar */
+  .preview{display:flex;align-items:center;gap:12px;background:var(--li-prev);padding:10px 16px;border-top:1px solid var(--li-border)}
+  .preview .txt{min-width:0}
+  .preview .ttl{font-size:14px;font-weight:600;line-height:1.35}
+  .preview .dom{font-size:12px;color:var(--li-mut2);margin-top:2px}
+  .preview .cta{margin-left:auto;flex:0 0 auto;border:1px solid var(--li-blue);color:var(--li-blue);background:transparent;
+    font-size:14px;font-weight:600;padding:6px 16px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .preview .cta:hover{background:rgba(10,102,194,.08);box-shadow:inset 0 0 0 1px var(--li-blue)}
+  .social{display:flex;align-items:center;gap:6px;padding:6px 16px;border-top:1px solid var(--li-border);color:var(--li-mut2);font-size:12px}
+  .social .r{display:flex;align-items:center;gap:3px}
+  .social .r i{width:16px;height:16px;border-radius:50%;display:inline-block}
+  .actions{display:flex;border-top:1px solid var(--li-border);padding:4px 8px}
+  .actions button{flex:1;background:none;border:0;color:var(--li-mut);font-size:13.5px;font-weight:600;
+    padding:10px 4px;border-radius:4px;cursor:default;display:flex;align-items:center;justify-content:center;gap:6px}
+  .actions svg{width:18px;height:18px;fill:currentColor}
 
-  /* DMs */
-  .dm{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .dm .head{display:flex;gap:11px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
-  .dm .av{width:40px;height:40px;border-radius:50%;background:#2a2a2e;color:#fff;display:flex;align-items:center;
-    justify-content:center;font-family:var(--head);font-size:14px;flex:0 0 auto}
-  .dm .sponsored{margin-left:auto;font-size:11px;color:var(--muted)}
-  .dm .msg{padding:16px;font-size:14.5px}
-  .dm .msg a.inline{color:var(--sh-orange);font-weight:700;text-decoration:none}
-  .dm .msg .macro{background:#fff1e3;border-radius:4px;padding:0 3px;font-weight:700}
-  .dm .cta{padding:0 16px 16px}
+  /* ---- messaging ---- */
+  .msgwrap{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:560px}
+  @media (max-width:700px){.msgwrap{grid-template-columns:1fr}}
+  .msglist{border-right:1px solid var(--li-border)}
+  .msglist .lh{padding:12px 14px;border-bottom:1px solid var(--li-border);font-weight:600;font-size:15px}
+  .thread{display:flex;gap:9px;padding:11px 13px;border-bottom:1px solid var(--li-border);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+  .thread.on{background:#eaf3fc}
+  .thread .av{width:40px;height:40px;border-radius:50%;background:#1b1f23;color:#fff;display:flex;align-items:center;
+    justify-content:center;font-size:13px;font-weight:600;flex:0 0 auto}
+  .thread .n{font-size:13.5px;font-weight:600}
+  .thread .p{font-size:12px;color:var(--li-mut2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:165px}
+  .thread .sp{font-size:10.5px;color:var(--li-mut2);margin-top:2px}
+  .pane{display:none;flex-direction:column}
+  .pane.on{display:flex}
+  .pane .ph{padding:12px 16px;border-bottom:1px solid var(--li-border);display:flex;gap:10px;align-items:center}
+  .pane .ph .av{width:38px;height:38px;border-radius:50%;background:#1b1f23;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+  .pane .ph .n{font-size:14px;font-weight:600}
+  .pane .ph .r{font-size:12px;color:var(--li-mut2)}
+  .pane .ph .sponsor{margin-left:auto;font-size:11px;color:var(--li-mut2)}
+  .bubblewrap{padding:18px 16px;flex:1}
+  .bubble{background:#f4f2ee;border-radius:0 8px 8px 8px;padding:13px 15px;font-size:14px;max-width:560px}
+  .bubble a.inline{color:var(--li-blue);font-weight:600;text-decoration:underline}
+  .bubble .macro{background:#fff3c4;border-radius:3px;padding:0 3px}
+  .msgcta{padding:0 16px 16px}
+  .msgcta a{display:inline-block;background:var(--li-blue);color:#fff;font-size:14px;font-weight:600;
+    padding:8px 20px;border-radius:999px}
+  .msgcta a:hover{background:#004182}
 
-  /* inspector */
-  .insp{border-top:1px dashed var(--line);background:#fcfcfd;padding:11px 16px 13px;font-size:11.5px;color:var(--muted)}
+  /* ---- inspector ---- */
+  .insp{background:#fcfcfd;border-top:1px dashed var(--li-border);padding:10px 16px 12px;font-size:11.5px;color:var(--li-mut)}
   .insp .t{font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:10px;color:var(--sh-orange);margin-bottom:5px}
   .insp code{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;word-break:break-all;display:block;
     background:#141418;color:#e8e8ee;padding:7px 9px;border-radius:6px;margin:3px 0 7px;line-height:1.5}
   .insp code .m{color:#ffb86b}
   .insp code .v{color:#a9d6ff}
-  .insp .notpassed{color:#b23b3b;font-weight:700}
-  .panel{display:none}
-  .panel.on{display:block}
-  .legend{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted);margin-bottom:16px}
-  .legend b{color:var(--ink)}
+  .insp .np{color:#b23b3b;font-weight:700}
+
+  .panel{display:none}.panel.on{display:block}
+  .rightcol{position:sticky;top:74px}
+  .rightcol .h{padding:12px 14px;font-weight:600;font-size:15px;border-bottom:1px solid var(--li-border)}
+  .rightcol .b{padding:12px 14px;font-size:12.5px;color:var(--li-mut);line-height:1.6}
+  .rightcol .b b{color:var(--li-ink)}
 </style>
 </head>
 <body>
 
-<div class="topbar">
+<nav class="nav">
   <div class="in">
-    <span class="sim-badge">Simulation</span>
-    <strong style="font-size:14px">Superheat paid campaign preview</strong>
-    <div class="tabs">
-      <button id="tabFeed" class="on" onclick="show('feed')">Feed</button>
-      <button id="tabMsg" onclick="show('msg')">Messaging</button>
+    <div class="logo">in</div>
+    <div class="search">🔍 Search</div>
+    <span class="simbadge">Simulation · campaign preview</span>
+    <div class="navitems">
+      <button class="navitem on" onclick="show('feed')">
+        <svg viewBox="0 0 24 24"><path d="M23 9v2h-2v7a3 3 0 0 1-3 3h-4v-6h-4v6H6a3 3 0 0 1-3-3v-7H1V9l11-7 5 3.18V2h3v5.09z"/></svg>Home</button>
+      <button class="navitem" onclick="show('msg')">
+        <svg viewBox="0 0 24 24"><path d="M16 4H8a7 7 0 0 0 0 14h4v4l8.16-5.39A6.78 6.78 0 0 0 23 11a7 7 0 0 0-7-7z"/></svg>Messaging</button>
     </div>
   </div>
-</div>
+</nav>
 
 <div class="wrap">
-  <aside class="profile">
-    <div class="cover"></div>
-    <div class="body">
-      <div class="avatar">AK</div>
-      <h2>Alex Kinjerski</h2>
-      <div class="role">Senior Director of Operations<br>Valero Energy Inc.</div>
-      <div class="loc">Port Arthur, TX</div>
-      <div class="note">Simulated member, matching the targeting snips: company list, job titles, and US / Canada / UK locations.</div>
+  <!-- left -->
+  <aside>
+    <div class="card me">
+      <div class="cover"></div>
+      <div class="body">
+        <div class="av">AK</div>
+        <h2>Alex Kinjerski</h2>
+        <div class="role">Senior Director of Operations at Valero Energy Inc.</div>
+        <div class="loc">Port Arthur, Texas, United States</div>
+        <div class="stats">
+          <div><span>Profile viewers</span><b>142</b></div>
+          <div><span>Post impressions</span><b>1,038</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:8px">
+      <div class="sidenote">Simulated member matching the campaign targeting: company list, operations and maintenance job titles, US / Canada / UK.</div>
     </div>
   </aside>
 
+  <!-- centre -->
   <main>
-    <div class="legend">
-      <b>What this shows:</b> the same three campaign themes as an ad and as a direct message. The DM text resolves the
-      member macros, the <b>link does not</b> — open the inspector under each item to see exactly what reaches the landing page.
-    </div>
-
     <!-- ============ FEED ============ -->
     <div id="feed" class="panel on">
       <div class="feed">
 
-        <article class="post">
+        <!-- POST 1 -->
+        <article class="card post">
           <div class="head">
             <div class="brand"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></div>
-            <div><div class="who">Superheat</div><div class="meta">Promoted</div></div>
+            <div>
+              <div class="who">Superheat</div>
+              <div class="sub">8,412 followers</div>
+              <div class="sub">Promoted</div>
+            </div>
+            <div class="dots">···</div>
           </div>
-          <p class="copy">Turnaround windows don't stretch. Your PWHT schedule shouldn't have to. Superheat SmartWay™ runs heat cycles remotely from our SmartCenter™, with live weld status in SmartView™ throughout the outage.</p>
-          <div class="creative">
-            <img src="../assets/services-logos.svg#t-smartway" alt="SmartWay">
-            <div class="hl">Heat treatment built for turnaround season</div>
+          <div class="copy">Turnaround windows don't stretch. Your PWHT schedule shouldn't have to. Superheat SmartWay™ runs heat cycles remotely from our SmartCenter™, with live weld status in SmartView™ throughout the outage.
+
+<span class="tag">#heattreatment</span> <span class="tag">#turnaround</span> <span class="tag">#PWHT</span></div>
+          <a class="creative" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Turnaround&utm_content=Post_TurnaroundSchedule&demo=true">
+            <div class="art">
+              <img src="../assets/services-logos.svg#t-smartway" alt="SmartWay">
+              <div class="hl">Heat treatment built for turnaround season</div>
+            </div>
+          </a>
+          <div class="preview">
+            <div class="txt">
+              <div class="ttl">Heat treatment built for turnaround season</div>
+              <div class="dom">superheat.com · 1 min read</div>
+            </div>
+            <a class="cta" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Turnaround&utm_content=Post_TurnaroundSchedule&demo=true">Learn more</a>
           </div>
-          <div class="cta">
-            <span class="label">superheat.com</span>
-            <a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Turnaround&utm_content=Post_TurnaroundSchedule&li_cid=714829301&li_crid=320114507&demo=true">Learn more</a>
+          <div class="social">
+            <span class="r"><i style="background:#0a66c2"></i><i style="background:#df704d;margin-left:-5px"></i> 64</span>
+            <span style="margin-left:auto">11 comments · 4 reposts</span>
+          </div>
+          <div class="actions">
+            <button><svg viewBox="0 0 24 24"><path d="M19.46 11l-3.91-3.91a7 7 0 0 1-1.69-2.74l-.49-1.47A2.76 2.76 0 0 0 10.76 1 2.75 2.75 0 0 0 8 3.74v1.12a9.19 9.19 0 0 0 .46 2.85L8.89 9H4.12A2.12 2.12 0 0 0 2 11.12a2.16 2.16 0 0 0 .92 1.76A2.11 2.11 0 0 0 2 14.62a2.14 2.14 0 0 0 1.28 2 2 2 0 0 0-.28 1 2.12 2.12 0 0 0 2 2.12v.14A2.12 2.12 0 0 0 7.12 22h7.49a8.08 8.08 0 0 0 3.58-.84l.31-.16H21V11z"/></svg>Like</button>
+            <button><svg viewBox="0 0 24 24"><path d="M7 9h10v1H7zm0 4h7v-1H7zm16-2a6.78 6.78 0 0 1-2.84 5.61L12 22v-4H8A7 7 0 0 1 8 4h8a7 7 0 0 1 7 7z"/></svg>Comment</button>
+            <button><svg viewBox="0 0 24 24"><path d="M23 12l-4.61 7H16l4-6H6a3 3 0 0 0-3 3v2H1v-2a5 5 0 0 1 5-5h14l-4-6h2.39z"/></svg>Repost</button>
+            <button><svg viewBox="0 0 24 24"><path d="M21 3L0 10l7.66 4.26L16 8l-6.26 8.34L14 24l7-21z"/></svg>Send</button>
           </div>
           <div class="insp">
             <div class="t">Link inspector</div>
             Template: <code>/smartway-solutions/?utm_source=linkedin&amp;utm_medium=paid_social&amp;utm_campaign=<span class="m">{{CAMPAIGN_NAME}}</span>&amp;utm_content=<span class="m">{{CREATIVE_NAME}}</span>&amp;li_cid=<span class="m">{{CAMPAIGN_ID}}</span>&amp;li_crid=<span class="m">{{CREATIVE_ID}}</span></code>
             Resolves to: <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">paid_social</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Turnaround</span>&amp;utm_content=<span class="v">Post_TurnaroundSchedule</span>&amp;li_cid=<span class="v">714829301</span>&amp;li_crid=<span class="v">320114507</span></code>
-            <span class="notpassed">Not passed: name, title, company.</span>
+            <span class="np">Not passed: name, title, company.</span>
           </div>
         </article>
 
-        <article class="post">
+        <!-- POST 2 -->
+        <article class="card post">
           <div class="head">
             <div class="brand"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></div>
-            <div><div class="who">Superheat</div><div class="meta">Promoted</div></div>
+            <div>
+              <div class="who">Superheat</div>
+              <div class="sub">8,412 followers</div>
+              <div class="sub">Promoted</div>
+            </div>
+            <div class="dots">···</div>
           </div>
-          <p class="copy">Routine maintenance shouldn't mean more people in the unit. SmartWay™ operates heat treatment equipment remotely, so your crew sees every cycle live without extra field labour.</p>
-          <div class="creative">
-            <img src="../assets/services-logos.svg#t-smartcenter" alt="SmartCenter">
-            <div class="hl">Remote-controlled heat treatment for planned maintenance</div>
+          <div class="copy">Routine maintenance shouldn't mean more people in the unit. SmartWay™ operates heat treatment equipment remotely, so your crew sees every cycle live without extra field labour.
+
+<span class="tag">#maintenance</span> <span class="tag">#remoteoperations</span> <span class="tag">#refining</span></div>
+          <a class="creative" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Maintenance&utm_content=Post_RemoteOperation&demo=true">
+            <div class="art">
+              <img src="../assets/services-logos.svg#t-smartcenter" alt="SmartCenter">
+              <div class="hl">Remote-controlled heat treatment for planned maintenance</div>
+            </div>
+          </a>
+          <div class="preview">
+            <div class="txt">
+              <div class="ttl">Remote-controlled heat treatment for planned maintenance</div>
+              <div class="dom">superheat.com · 1 min read</div>
+            </div>
+            <a class="cta" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Maintenance&utm_content=Post_RemoteOperation&demo=true">Learn more</a>
           </div>
-          <div class="cta">
-            <span class="label">superheat.com</span>
-            <a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_Maintenance&utm_content=Post_RemoteOperation&li_cid=714829302&li_crid=320114511&demo=true">Learn more</a>
+          <div class="social">
+            <span class="r"><i style="background:#0a66c2"></i><i style="background:#6dae4f;margin-left:-5px"></i> 38</span>
+            <span style="margin-left:auto">6 comments · 2 reposts</span>
+          </div>
+          <div class="actions">
+            <button><svg viewBox="0 0 24 24"><path d="M19.46 11l-3.91-3.91a7 7 0 0 1-1.69-2.74l-.49-1.47A2.76 2.76 0 0 0 10.76 1 2.75 2.75 0 0 0 8 3.74v1.12a9.19 9.19 0 0 0 .46 2.85L8.89 9H4.12A2.12 2.12 0 0 0 2 11.12a2.16 2.16 0 0 0 .92 1.76A2.11 2.11 0 0 0 2 14.62a2.14 2.14 0 0 0 1.28 2 2 2 0 0 0-.28 1 2.12 2.12 0 0 0 2 2.12v.14A2.12 2.12 0 0 0 7.12 22h7.49a8.08 8.08 0 0 0 3.58-.84l.31-.16H21V11z"/></svg>Like</button>
+            <button><svg viewBox="0 0 24 24"><path d="M7 9h10v1H7zm0 4h7v-1H7zm16-2a6.78 6.78 0 0 1-2.84 5.61L12 22v-4H8A7 7 0 0 1 8 4h8a7 7 0 0 1 7 7z"/></svg>Comment</button>
+            <button><svg viewBox="0 0 24 24"><path d="M23 12l-4.61 7H16l4-6H6a3 3 0 0 0-3 3v2H1v-2a5 5 0 0 1 5-5h14l-4-6h2.39z"/></svg>Repost</button>
+            <button><svg viewBox="0 0 24 24"><path d="M21 3L0 10l7.66 4.26L16 8l-6.26 8.34L14 24l7-21z"/></svg>Send</button>
           </div>
           <div class="insp">
             <div class="t">Link inspector</div>
             Template: <code>/smartway-solutions/?utm_source=linkedin&amp;utm_medium=paid_social&amp;utm_campaign=<span class="m">{{CAMPAIGN_NAME}}</span>&amp;utm_content=<span class="m">{{CREATIVE_NAME}}</span>&amp;li_cid=<span class="m">{{CAMPAIGN_ID}}</span>&amp;li_crid=<span class="m">{{CREATIVE_ID}}</span></code>
             Resolves to: <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">paid_social</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Maintenance</span>&amp;utm_content=<span class="v">Post_RemoteOperation</span>&amp;li_cid=<span class="v">714829302</span>&amp;li_crid=<span class="v">320114511</span></code>
-            <span class="notpassed">Not passed: name, title, company.</span>
+            <span class="np">Not passed: name, title, company.</span>
           </div>
         </article>
 
-        <article class="post">
+        <!-- POST 3 -->
+        <article class="card post">
           <div class="head">
             <div class="brand"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></div>
-            <div><div class="who">Superheat</div><div class="meta">Promoted</div></div>
+            <div>
+              <div class="who">Superheat</div>
+              <div class="sub">8,412 followers</div>
+              <div class="sub">Promoted</div>
+            </div>
+            <div class="dots">···</div>
           </div>
-          <p class="copy">One provider, one QA trail. SmartWay™ combines remote equipment operation, digital project tracking and a downloadable SmartReport™ QA package for every job.</p>
-          <div class="creative">
-            <img src="../assets/services-logos.svg#t-smartreports" alt="SmartReport">
-            <div class="hl">Turnkey heat treatment with QA built in</div>
+          <div class="copy">One provider, one QA trail. SmartWay™ combines remote equipment operation, digital project tracking and a downloadable SmartReport™ QA package for every job.
+
+<span class="tag">#qualityassurance</span> <span class="tag">#welding</span> <span class="tag">#turnkey</span></div>
+          <a class="creative" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_QA&utm_content=Post_QAPackage&demo=true">
+            <div class="art">
+              <img src="../assets/services-logos.svg#t-smartreports" alt="SmartReport">
+              <div class="hl">Turnkey heat treatment with QA built in</div>
+            </div>
+          </a>
+          <div class="preview">
+            <div class="txt">
+              <div class="ttl">Turnkey heat treatment with QA built in</div>
+              <div class="dom">superheat.com · 1 min read</div>
+            </div>
+            <a class="cta" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_QA&utm_content=Post_QAPackage&demo=true">Learn more</a>
           </div>
-          <div class="cta">
-            <span class="label">superheat.com</span>
-            <a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=SH_SmartWay_QA&utm_content=Post_QAPackage&li_cid=714829303&li_crid=320114519&demo=true">Learn more</a>
+          <div class="social">
+            <span class="r"><i style="background:#0a66c2"></i><i style="background:#df704d;margin-left:-5px"></i> 51</span>
+            <span style="margin-left:auto">9 comments · 3 reposts</span>
+          </div>
+          <div class="actions">
+            <button><svg viewBox="0 0 24 24"><path d="M19.46 11l-3.91-3.91a7 7 0 0 1-1.69-2.74l-.49-1.47A2.76 2.76 0 0 0 10.76 1 2.75 2.75 0 0 0 8 3.74v1.12a9.19 9.19 0 0 0 .46 2.85L8.89 9H4.12A2.12 2.12 0 0 0 2 11.12a2.16 2.16 0 0 0 .92 1.76A2.11 2.11 0 0 0 2 14.62a2.14 2.14 0 0 0 1.28 2 2 2 0 0 0-.28 1 2.12 2.12 0 0 0 2 2.12v.14A2.12 2.12 0 0 0 7.12 22h7.49a8.08 8.08 0 0 0 3.58-.84l.31-.16H21V11z"/></svg>Like</button>
+            <button><svg viewBox="0 0 24 24"><path d="M7 9h10v1H7zm0 4h7v-1H7zm16-2a6.78 6.78 0 0 1-2.84 5.61L12 22v-4H8A7 7 0 0 1 8 4h8a7 7 0 0 1 7 7z"/></svg>Comment</button>
+            <button><svg viewBox="0 0 24 24"><path d="M23 12l-4.61 7H16l4-6H6a3 3 0 0 0-3 3v2H1v-2a5 5 0 0 1 5-5h14l-4-6h2.39z"/></svg>Repost</button>
+            <button><svg viewBox="0 0 24 24"><path d="M21 3L0 10l7.66 4.26L16 8l-6.26 8.34L14 24l7-21z"/></svg>Send</button>
           </div>
           <div class="insp">
             <div class="t">Link inspector</div>
             Template: <code>/smartway-solutions/?utm_source=linkedin&amp;utm_medium=paid_social&amp;utm_campaign=<span class="m">{{CAMPAIGN_NAME}}</span>&amp;utm_content=<span class="m">{{CREATIVE_NAME}}</span>&amp;li_cid=<span class="m">{{CAMPAIGN_ID}}</span>&amp;li_crid=<span class="m">{{CREATIVE_ID}}</span></code>
             Resolves to: <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">paid_social</span>&amp;utm_campaign=<span class="v">SH_SmartWay_QA</span>&amp;utm_content=<span class="v">Post_QAPackage</span>&amp;li_cid=<span class="v">714829303</span>&amp;li_crid=<span class="v">320114519</span></code>
-            <span class="notpassed">Not passed: name, title, company.</span>
+            <span class="np">Not passed: name, title, company.</span>
           </div>
         </article>
 
@@ -190,70 +311,89 @@
 
     <!-- ============ MESSAGING ============ -->
     <div id="msg" class="panel">
-      <div class="feed">
-
-        <article class="dm">
-          <div class="head">
+      <div class="card msgwrap">
+        <div class="msglist">
+          <div class="lh">Messaging</div>
+          <button class="thread on" id="th1" onclick="openThread(1)">
             <div class="av">DS</div>
-            <div><div class="who" style="font-size:14px;font-weight:700">Dylan Sayle</div>
-                 <div class="meta" style="font-size:12px;color:var(--muted)">Marketing Manager, Superheat</div></div>
-            <span class="sponsored">Sponsored message</span>
+            <div><div class="n">Dylan Sayle</div><div class="p">Hi Alex, turnaround planning at Valero…</div><div class="sp">Sponsored</div></div>
+          </button>
+          <button class="thread" id="th2" onclick="openThread(2)">
+            <div class="av">DS</div>
+            <div><div class="n">Dylan Sayle</div><div class="p">Hi Alex, as Senior Director of Opera…</div><div class="sp">Sponsored</div></div>
+          </button>
+          <button class="thread" id="th3" onclick="openThread(3)">
+            <div class="av">DS</div>
+            <div><div class="n">Dylan Sayle</div><div class="p">Hi Alex, choosing a heat treatment pr…</div><div class="sp">Sponsored</div></div>
+          </button>
+        </div>
+
+        <div class="pane on" id="pane1">
+          <div class="ph"><div class="av">DS</div><div><div class="n">Dylan Sayle</div><div class="r">Marketing Manager, Superheat</div></div><span class="sponsor">Sponsored message</span></div>
+          <div class="bubblewrap">
+            <div class="bubble">Hi <span class="macro">Alex</span>, turnaround planning at <span class="macro">Valero</span> usually squeezes preheat and PWHT into the same window as everything else. SmartWay™ runs those heat cycles remotely from our <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Turnaround&utm_content=DM_Turnaround_v1&demo=true">SmartCenter™</a>, so your team tracks live weld status without extra people in the unit. Worth two minutes before your next outage?</div>
           </div>
-          <p class="msg">Hi <span class="macro">Alex</span>, turnaround planning at <span class="macro">Valero</span> usually squeezes preheat and PWHT into the same window as everything else. SmartWay™ runs those heat cycles remotely from our <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Turnaround&utm_content=DM_Turnaround_v1&demo=true">SmartCenter™</a>, so your team tracks live weld status without extra people in the unit. Worth two minutes before your next outage?</p>
-          <div class="cta"><a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Turnaround&utm_content=DM_Turnaround_v1&demo=true">See how SmartWay works</a></div>
+          <div class="msgcta"><a href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Turnaround&utm_content=DM_Turnaround_v1&demo=true">See how SmartWay works</a></div>
           <div class="insp">
             <div class="t">Link inspector</div>
-            Message macros resolved in the text: <b>Alex</b>, <b>Valero</b>.
+            Macros resolved in the message text: <b>Alex</b>, <b>Valero</b>.
             Link (static): <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">sponsored_message</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Turnaround</span>&amp;utm_content=<span class="v">DM_Turnaround_v1</span></code>
-            <span class="notpassed">Not passed: name, title, company.</span>
+            <span class="np">Not passed: name, title, company.</span>
           </div>
-        </article>
+        </div>
 
-        <article class="dm">
-          <div class="head">
-            <div class="av">DS</div>
-            <div><div class="who" style="font-size:14px;font-weight:700">Dylan Sayle</div>
-                 <div class="meta" style="font-size:12px;color:var(--muted)">Marketing Manager, Superheat</div></div>
-            <span class="sponsored">Sponsored message</span>
+        <div class="pane" id="pane2">
+          <div class="ph"><div class="av">DS</div><div><div class="n">Dylan Sayle</div><div class="r">Marketing Manager, Superheat</div></div><span class="sponsor">Sponsored message</span></div>
+          <div class="bubblewrap">
+            <div class="bubble">Hi <span class="macro">Alex</span>, as <span class="macro">Senior Director of Operations</span> at <span class="macro">Valero</span> you'll know how much field labour heat treatment ties up during routine maintenance. SmartWay™ operates the equipment remotely and shows every cycle live in <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Maintenance&utm_content=DM_Maintenance_v1&demo=true">SmartView™</a>. Want a quick look at how it fits your maintenance plan?</div>
           </div>
-          <p class="msg">Hi <span class="macro">Alex</span>, as <span class="macro">Senior Director of Operations</span> at <span class="macro">Valero</span> you'll know how much field labour heat treatment ties up during routine maintenance. SmartWay™ operates the equipment remotely and shows every cycle live in <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Maintenance&utm_content=DM_Maintenance_v1&demo=true">SmartView™</a>. Want a quick look at how it fits your maintenance plan?</p>
-          <div class="cta"><a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Maintenance&utm_content=DM_Maintenance_v1&demo=true">See how SmartWay works</a></div>
+          <div class="msgcta"><a href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_Maintenance&utm_content=DM_Maintenance_v1&demo=true">See how SmartWay works</a></div>
           <div class="insp">
             <div class="t">Link inspector</div>
-            Message macros resolved in the text: <b>Alex</b>, <b>Senior Director of Operations</b>, <b>Valero</b>.
+            Macros resolved in the message text: <b>Alex</b>, <b>Senior Director of Operations</b>, <b>Valero</b>.
             Link (static): <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">sponsored_message</span>&amp;utm_campaign=<span class="v">SH_SmartWay_Maintenance</span>&amp;utm_content=<span class="v">DM_Maintenance_v1</span></code>
-            <span class="notpassed">Not passed: name, title, company.</span>
+            <span class="np">Not passed: name, title, company.</span>
           </div>
-        </article>
+        </div>
 
-        <article class="dm">
-          <div class="head">
-            <div class="av">DS</div>
-            <div><div class="who" style="font-size:14px;font-weight:700">Dylan Sayle</div>
-                 <div class="meta" style="font-size:12px;color:var(--muted)">Marketing Manager, Superheat</div></div>
-            <span class="sponsored">Sponsored message</span>
+        <div class="pane" id="pane3">
+          <div class="ph"><div class="av">DS</div><div><div class="n">Dylan Sayle</div><div class="r">Marketing Manager, Superheat</div></div><span class="sponsor">Sponsored message</span></div>
+          <div class="bubblewrap">
+            <div class="bubble">Hi <span class="macro">Alex</span>, choosing a heat treatment provider for <span class="macro">Valero</span> means weighing cost, risk and QA evidence together. SmartWay™ covers all three in one turnkey service, with a downloadable <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_QA&utm_content=DM_QA_v1&demo=true">SmartReport™</a> QA package at close-out. Shall I show you how a job is scoped?</div>
           </div>
-          <p class="msg">Hi <span class="macro">Alex</span>, choosing a heat treatment provider for <span class="macro">Valero</span> means weighing cost, risk and QA evidence together. SmartWay™ covers all three in one turnkey service, with a downloadable <a class="inline" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_QA&utm_content=DM_QA_v1&demo=true">SmartReport™</a> QA package at close-out. Shall I show you how a job is scoped?</p>
-          <div class="cta"><a class="btn" href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_QA&utm_content=DM_QA_v1&demo=true">See how SmartWay works</a></div>
+          <div class="msgcta"><a href="../smartway-solutions/?utm_source=linkedin&utm_medium=sponsored_message&utm_campaign=SH_SmartWay_QA&utm_content=DM_QA_v1&demo=true">See how SmartWay works</a></div>
           <div class="insp">
             <div class="t">Link inspector</div>
-            Message macros resolved in the text: <b>Alex</b>, <b>Valero</b>.
+            Macros resolved in the message text: <b>Alex</b>, <b>Valero</b>.
             Link (static): <code>/smartway-solutions/?utm_source=<span class="v">linkedin</span>&amp;utm_medium=<span class="v">sponsored_message</span>&amp;utm_campaign=<span class="v">SH_SmartWay_QA</span>&amp;utm_content=<span class="v">DM_QA_v1</span></code>
-            <span class="notpassed">Not passed: name, title, company.</span>
+            <span class="np">Not passed: name, title, company.</span>
           </div>
-        </article>
-
+        </div>
       </div>
     </div>
   </main>
+
+  <!-- right -->
+  <aside class="card rightcol">
+    <div class="h">What this shows</div>
+    <div class="b">
+      The same three campaign themes as a <b>sponsored post</b> and as a <b>sponsored message</b>.<br><br>
+      The message text resolves the member macros — the <b>link does not</b>. Open the inspector under any item to see exactly what reaches the landing page, then click through and watch how Samson opens.
+    </div>
+  </aside>
 </div>
 
 <script>
 function show(which){
   document.getElementById('feed').classList.toggle('on', which==='feed');
   document.getElementById('msg').classList.toggle('on', which==='msg');
-  document.getElementById('tabFeed').classList.toggle('on', which==='feed');
-  document.getElementById('tabMsg').classList.toggle('on', which==='msg');
+  document.querySelectorAll('.navitem').forEach((b,i)=>b.classList.toggle('on', (i===0)===(which==='feed')));
+}
+function openThread(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('pane'+i).classList.toggle('on', i===n);
+    document.getElementById('th'+i).classList.toggle('on', i===n);
+  });
 }
 </script>
 </body>
