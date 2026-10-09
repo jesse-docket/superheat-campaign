@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Contact Us Today: SmartWay™ Solutions | Superheat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sh-orange:#f26d17; --sh-orange2:#f46c15; --sh-amber:#ffb102;
+    --sh-grey:#e5e5e5; --sh-black:#000000; --sh-white:#ffffff; --sh-dark:#3d3935;
+    --head:"Russo One","PT Sans",system-ui,sans-serif;
+    --body:"PT Sans",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);font-size:16px;line-height:1.5;color:#000;background:#fff;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--head);font-weight:400;line-height:1.25}
+  a{color:inherit}
+  .container{max-width:1140px;margin:0 auto;padding:0 12px}
+  .btn{display:inline-block;background:var(--sh-orange);color:#fff;border:3px solid #fff;border-radius:10px;
+    padding:15.8px 33.8px;font-family:var(--body);font-size:19px;font-weight:700;cursor:pointer;text-decoration:none;
+    transition:filter .15s}
+  .btn:hover{filter:brightness(1.08)}
+
+  /* header */
+  header.site{background:#000;padding:14px 0}
+  header.site .row{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+  header.site .logo img{height:40px;width:auto;display:block}
+  header.site .phones{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+  header.site .phones a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap}
+  header.site .phones a:hover{color:var(--sh-orange)}
+  header.site .social{display:flex;gap:14px}
+  header.site .social a{color:#fff;opacity:.85;font-size:13px;text-decoration:none;letter-spacing:.04em}
+  header.site .social a:hover{opacity:1;color:var(--sh-orange)}
+
+  /* hero */
+  .hero{position:relative;background:#000;color:#fff;text-align:center;overflow:hidden}
+  .hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+  .hero .inner{position:relative;padding:92px 12px 118px;max-width:1000px;margin:0 auto}
+  .hero h1{font-size:clamp(24px,3.4vw,38px);line-height:1.3}
+  .hero h1 .light{display:block;font-size:clamp(20px,2.6vw,30px);margin-top:8px}
+
+  /* chevron sections */
+  .chev{position:relative;margin-block-start:-6.25rem;padding-block-start:9rem;
+    clip-path:polygon(0 0, 50% 5.75rem, 100% 0, 100% 100%, 0 100%)}
+  @media (max-width:62rem){ .chev{margin-block-start:-2rem;padding-block-start:4.5rem;
+    clip-path:polygon(0 0, 50% 2.5rem, 100% 0, 100% 100%, 0 100%)} }
+  .sep{height:8px;background:#000;clip-path:polygon(0 0, 50% 5.75rem, 100% 0, 100% 100%, 0 100%)}
+
+  .white{background:#fff}
+  .grey{background:var(--sh-grey)}
+  .pad{padding-bottom:70px}
+
+  /* section 2 */
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:46px;align-items:start}
+  @media (max-width:900px){.two{grid-template-columns:1fr}}
+  .two h2{font-size:22px;margin-bottom:18px}
+  .two p{margin-bottom:16px}
+  .video{position:relative;border-radius:6px;overflow:hidden;margin-bottom:22px;background:#000}
+  .video img{width:100%;display:block;opacity:.9}
+  .video .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border:0;background:transparent;cursor:pointer}
+  .video .play span{width:84px;height:84px;border-radius:50%;background:var(--sh-orange);border:3px solid #fff;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;padding-left:6px}
+  .video .wordmark{position:absolute;top:18px;left:20px;height:34px;width:auto}
+
+  /* agent panel (replaces the Gravity Form) */
+  .agent-card{border:2px solid var(--sh-amber);border-radius:10px;padding:26px 24px;background:#fff}
+  .agent-card h2{font-size:21px;line-height:1.3;margin-bottom:10px}
+  .agent-card .lead{font-size:15.5px;margin-bottom:18px}
+  .agent-card ul{list-style:none;margin:0 0 20px}
+  .agent-card li{position:relative;padding-left:26px;margin-bottom:9px;font-size:15px}
+  .agent-card li::before{content:"";position:absolute;left:0;top:7px;width:12px;height:12px;border-radius:3px;background:var(--sh-orange)}
+  .agent-card .btn{width:100%;text-align:center;font-size:17px;padding:14px 20px}
+  .agent-card .fine{margin-top:12px;font-size:12.5px;color:#555;text-align:center}
+  .agent-card .fine a{color:var(--sh-orange)}
+
+  /* pillars */
+  .pillars h2{font-size:22px;text-align:center}
+  .pillars .sub{text-align:center;max-width:760px;margin:12px auto 40px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+  @media (max-width:980px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.grid4{grid-template-columns:1fr}}
+  .pillar img{height:64px;width:auto;margin-bottom:14px}
+  .pillar h3{font-size:18px;margin-bottom:8px}
+  .pillar p{font-size:14.5px}
+
+  /* solution */
+  .solution h2{font-size:22px;text-align:center}
+  .solution .sub{text-align:center;margin:10px 0 34px;color:#333}
+  .sol-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center}
+  @media (max-width:900px){.sol-grid{grid-template-columns:1fr}}
+  .sol-grid img{width:100%;height:auto;display:block}
+  .onsite{font-family:var(--head);font-size:18px;margin:26px 0 14px}
+  .onsite em{font-style:normal;color:var(--sh-orange2)}
+  .sheets{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  @media (max-width:560px){.sheets{grid-template-columns:1fr}}
+  .sheets a{display:block;padding:9px 13px;border:1px solid #d6d6de;border-radius:8px;text-decoration:none;
+    font-size:14px;font-weight:700;background:#fff}
+  .sheets a:hover{border-color:var(--sh-orange);color:var(--sh-orange)}
+
+  /* locations */
+  .locations{text-align:center}
+  .locations h2{font-size:22px;margin-bottom:12px}
+  .locations p{max-width:700px;margin:0 auto 26px}
+  .locations img{max-width:520px;width:100%;height:auto}
+
+  /* footer */
+  footer.site{background:var(--sh-grey);padding:44px 0 0}
+  footer.site .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
+  @media (max-width:880px){footer.site .cols{grid-template-columns:1fr}}
+  footer.site h4{font-family:var(--head);font-size:16px;margin-bottom:12px}
+  footer.site p,footer.site a{font-size:14px}
+  footer.site .logo img{height:34px;margin-bottom:14px}
+  .legal{background:#000;color:#fff;text-align:center;padding:14px 0;font-size:13px;margin-top:36px}
+  .demo-note{background:#fff7ef;border-top:1px solid #ffd9b8;padding:12px 0;font-size:12.5px;color:#7a4a1d;text-align:center}
+
+  /* modal */
+  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal .box{width:min(960px,100%);aspect-ratio:16/9;background:#000;position:relative}
+  .modal iframe{width:100%;height:100%;border:0}
+  .modal .x{position:absolute;top:-42px;right:0;background:none;border:0;color:#fff;font-size:30px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="container row">
+    <a class="logo" href="https://www.superheat.com/" aria-label="Superheat"><img src="../assets/superheat-logo.svg#t-ffffff" alt="Superheat"></a>
+    <div class="phones">
+      <a href="tel:18885083226">1.888.508.3226</a>
+      <a href="tel:+441462888003">+44 (0) 1462 888003</a>
+    </div>
+    <div class="social">
+      <a href="https://www.linkedin.com/company/superheat-fgh" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.youtube.com/@SuperheatHeatTreatment" target="_blank" rel="noopener">YouTube</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <img class="bg" src="../assets/hero.jpg" alt="">
+  <div class="inner">
+    <h1>The Superheat SmartWay™:
+      <span class="light">The Leading On-Site Heat Treatment Solution<br>for the Digital Marketplace</span>
+    </h1>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section class="white chev pad">
+  <div class="container two">
+    <div>
+      <h2>Better. Safer. Faster: Solving the Challenges of Traditional On-site Heat Treatment</h2>
+      <div class="video">
+        <img src="../assets/video-poster.jpg" alt="Superheat SmartWay video">
+        <img class="wordmark" src="../assets/services-logos.svg#t-smartway" alt="">
+        <button class="play" onclick="openVideo()" aria-label="Play video"><span>▶</span></button>
+      </div>
+      <p>At Superheat, we understand the challenges associated with traditional on-site heat treatment, from labor-intensive operations and limited project visibility to schedule pressures, safety concerns, and quality risks. That's why we've combined remote equipment operation, advanced heating technology, digital project management, and integrated quality assurance into a smarter approach.</p>
+      <p>The result is Superheat SmartWay™: a more efficient, connected, and data-driven on-site heat treatment solution that helps clients improve safety, enhance quality, increase productivity, and maintain greater control over their projects.</p>
+      <p>Watch the video above to get an inside look at Superheat SmartWay™.</p>
+    </div>
+
+    <!-- The Gravity Form is intentionally replaced: Samson collects the same details in conversation -->
+    <aside class="agent-card">
+      <h2>Skip the Form. Talk to a Heat Treatment Specialist Now.</h2>
+      <p class="lead">Samson is Superheat's SmartAssistant. Tell him about your job and he'll scope it with you on the spot — no form, no waiting for a callback.</p>
+      <ul>
+        <li>Answers PWHT, preheat, induction and QA questions directly</li>
+        <li>Works out which Superheat service fits your scope</li>
+        <li>Passes your details to the specialist for your region</li>
+      </ul>
+      <button class="btn" onclick="talkToSamson('I have a job to scope.')">Start the conversation</button>
+      <p class="fine">Prefer the traditional route? <a href="https://www.superheat.com/contactus-dk/" target="_blank" rel="noopener">Use the contact form</a> or call 1.888.508.3226.</p>
+    </aside>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section class="grey chev pad pillars">
+  <div class="container">
+    <h2>Our Four Pillars of Operational Success</h2>
+    <p class="sub">Every aspect of our turnkey Superheat SmartWay™ service offering is focused on improving the key pillars of your project.</p>
+    <div class="grid4">
+      <div class="pillar">
+        <img src="../assets/ico-reduce-costs.svg" alt="">
+        <h3>Reduce Costs</h3>
+        <p>On-site setup technicians work cross-functionally with the Superheat SmartCenter™, who remotely control and operate all on-site heat treatment services. Thus, producing higher productivity rates while minimizing labor costs to your project.</p>
+      </div>
+      <div class="pillar">
+        <img src="../assets/ico-save-time.svg" alt="">
+        <h3>Save Time</h3>
+        <p>Through your Superheat SmartView™ digital QA platform, view real-time heat treatment statuses and overall project analytics. Providing you with live data to make informed decisions that cut idle time to your project.</p>
+      </div>
+      <div class="pillar">
+        <img src="../assets/ico-minimize-risk.svg" alt="">
+        <h3>Minimize Risk</h3>
+        <p>Your safety is our top priority. By remotely operating all on-site heat treatment equipment from our Superheat SmartCenter™, we dramatically reduce footprint, therefore, overall risks at the field level.</p>
+      </div>
+      <div class="pillar">
+        <img src="../assets/ico-improve-quality.svg" alt="">
+        <h3>Improve Quality</h3>
+        <p>Integration into the Superheat SmartView™ digital QA platform enables you to view real-time project analytics and download final QA SmartReport™ packages from the palm of your hand. This ensures on-site heat treatment services are done right the first time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section class="white chev pad solution">
+  <div class="container">
+    <h2>The Superheat SmartWay™ Solution</h2>
+    <p class="sub">Download the corresponding datasheet from the list below</p>
+    <div class="sol-grid">
+      <div>
+        <img src="../assets/smartview-devices.png" alt="Superheat SmartView on desktop, tablet and mobile">
+      </div>
+      <div>
+        <img src="../assets/equip-diagram.jpg" alt="Superheat SmartWay equipment process">
+      </div>
+    </div>
+    <h3 class="onsite"><em>On-site</em> Wireless Control &amp; Monitoring</h3>
+    <ul class="sheets">
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartPak_2021.pdf" target="_blank" rel="noopener">SmartPak™ &amp; SmartCard™ datasheet</a></li>
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartPoint(General)_2021.pdf" target="_blank" rel="noopener">SmartPoint™ datasheet</a></li>
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartGen(General)_2021.pdf" target="_blank" rel="noopener">SmartGen™ datasheet</a></li>
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartLink_2024_new.pdf" target="_blank" rel="noopener">SmartLink™ datasheet</a></li>
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartFurnace_2022.pdf" target="_blank" rel="noopener">SmartFurnace™ datasheet</a></li>
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartShak_2021.pdf" target="_blank" rel="noopener">SmartShak™ datasheet</a></li>
+    </ul>
+    <h3 class="onsite"><em>Off-site</em> Remote Wireless Control &amp; Monitoring</h3>
+    <ul class="sheets">
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartView_2022.pdf" target="_blank" rel="noopener">SmartView™ datasheet</a></li>
+      <li><a href="https://www.superheat.com/assets/docs/SH_SmartViewCenterReports_2021.pdf" target="_blank" rel="noopener">SmartCenter™ &amp; SmartReport™ datasheet</a></li>
+    </ul>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section class="white chev pad locations">
+  <div class="container">
+    <h2>There's a Superheat Location Near You</h2>
+    <p>With 25 locations strategically operating worldwide, we are ready to serve your on-site heat treatment needs, wherever you are.</p>
+    <img src="../assets/locations-map.png" alt="Superheat locations worldwide">
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container cols">
+    <div>
+      <div class="logo"><img src="../assets/superheat-logo.svg#t-3d3935" alt="Superheat"></div>
+      <h4>Company</h4>
+      <p>Superheat was founded on the principle that cutting-edge technology can offer a Better. Safer. Faster.™ way to provide on-site heat treatment services. As part of our full-service electrical resistance SmartWay™ solution, Superheat now offers induction heat treatment services.</p>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <p>North America: <a href="tel:18885083226">1.888.508.3226</a><br>
+      United Kingdom: <a href="tel:+441462888003">+44 (0) 1462 888003</a><br>
+      <a href="https://www.superheat.com/contactus-dk/" target="_blank" rel="noopener">Contact Us Form</a></p>
+    </div>
+    <div>
+      <h4>Superheat Locations</h4>
+      <p>With 25 facilities worldwide, there's a Superheat location near you.</p>
+    </div>
+  </div>
+  <div class="demo-note container" style="max-width:none">
+    Demo environment built by Docket for Superheat — not indexed, not a live Superheat page. The contact form is intentionally replaced by Samson R2 so the agent collects the same details in conversation.
+  </div>
+  <div class="legal">Copyright 2026 Superheat™</div>
+</footer>
+
+<div class="modal" id="vid" onclick="if(event.target.id==='vid')closeVideo()">
+  <div class="box">
+    <button class="x" onclick="closeVideo()" aria-label="Close">×</button>
+    <iframe id="vidFrame" src="" title="Superheat SmartWay" allow="accelerometer; autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- ======= Docket widget: Samson R2 ======= -->
+<script>
+window.AISellerSettings = {
+agent_id: '2fa1b61c-2243-4f36-98a6-b0a667ff4752',
+};
+// Then load the widget loader script
+(function () {
+var w = window;
+var ew = w.AISeller;
+if (typeof ew === 'function') {
+ew('update', w.AISellerSettings);
+} else {
+var d = document;
+var i = function () {
+i.q.push(arguments);
+};
+i.q = [];
+i.q.push(['update', w.AISellerSettings]);
+w.AISeller = i;
+var l = function () {
+var s = d.createElement('script');
+s.type = 'text/javascript';
+s.async = true;
+s.src = 'https://cdn.docketai.com/script/app/inbound-se-script/ai-seller.js';
+var x = d.getElementsByTagName('script')[0];
+x.parentNode.insertBefore(s, x);
+};
+if (document.readyState === 'complete') {
+l();
+} else if (w.attachEvent) {
+w.attachEvent('onload', l);
+} else {
+w.addEventListener('load', l, false);
+}
+}
+})();
+</script>
+
+<script>
+/* ---- campaign context bridge ---- */
+const P = new URLSearchParams(location.search);
+const g = k => (P.get(k) || '').trim();
+const MAP = [
+  ['utm_source','utm_source'], ['utm_medium','utm_medium'], ['utm_campaign','utm_campaign'],
+  ['utm_content','utm_content'], ['visitor','visitor_name'], ['account','account_name'],
+  ['title','job_title'], ['industry','industry'], ['work_type','work_type'],
+  ['application','application'], ['site','site_location'], ['start','start_date'],
+  ['topic','prior_topic'], ['next','next_best_step'], ['demo','demo_mode']
+];
+function buildContext(extra){
+  const ctx = {};
+  MAP.forEach(([p,f]) => { const v = g(p); if (v) ctx[f] = v; });
+  if (extra) ctx.visitor_question = extra;
+  return ctx;
+}
+async function waitFor(method, ms=20000){
+  const t0 = Date.now();
+  while (Date.now()-t0 < ms){
+    if (window.AISeller && typeof window.AISeller[method] === 'function') return true;
+    await new Promise(r => setTimeout(r, 150));
+  }
+  return false;
+}
+(async function(){
+  const ctx = buildContext();
+  if (Object.keys(ctx).length){
+    if (await waitFor('setContext')) { try{ await window.AISeller.setContext(ctx); }catch(e){} }
+  } else {
+    if (await waitFor('resetContext')) { try{ await window.AISeller.resetContext(); }catch(e){} }
+  }
+  if (await waitFor('show')) { try{ window.AISeller.show(); }catch(e){} }
+  if (g('autostart') !== '0' && await waitFor('showAndConnect')) {
+    await new Promise(r => setTimeout(r, 1200));
+    try{ await window.AISeller.showAndConnect(); }catch(e){}
+  }
+})();
+async function talkToSamson(question){
+  const ctx = buildContext(question);
+  if (await waitFor('setContext')) { try{ await window.AISeller.setContext(ctx); }catch(e){} }
+  if (await waitFor('showAndConnect')) { try{ await window.AISeller.showAndConnect(); return; }catch(e){} }
+  if (await waitFor('show')) { try{ window.AISeller.show(); }catch(e){} }
+}
+/* ---- video modal ---- */
+function openVideo(){
+  document.getElementById('vidFrame').src = 'https://www.youtube.com/embed/VR44tpeVyVE?autoplay=1';
+  document.getElementById('vid').classList.add('open');
+}
+function closeVideo(){
+  document.getElementById('vidFrame').src = '';
+  document.getElementById('vid').classList.remove('open');
+}
+</script>
+</body>
+</html>
