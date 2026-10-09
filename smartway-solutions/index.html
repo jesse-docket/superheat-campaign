@@ -116,6 +116,9 @@
   footer.site .logo img{height:34px;margin-bottom:14px}
   .legal{background:#000;color:#fff;text-align:center;padding:14px 0;font-size:13px;margin-top:36px}
   .demo-note{background:#fff7ef;border-top:1px solid #ffd9b8;padding:12px 0;font-size:12.5px;color:#7a4a1d;text-align:center}
+  .reset-btn{position:fixed;left:16px;bottom:16px;z-index:9998;background:#121212;color:#fff;border:0;
+    font-size:12.5px;font-weight:700;padding:10px 16px;border-radius:999px;cursor:pointer;opacity:.85;font-family:var(--body)}
+  .reset-btn:hover{opacity:1;background:var(--sh-orange)}
 
   /* modal */
   .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;padding:20px}
@@ -277,6 +280,8 @@
   <div class="legal">Copyright 2026 Superheat™</div>
 </footer>
 
+<button class="reset-btn" onclick="resetSession()" title="Clear the conversation and reload">↺ Reset session</button>
+
 <div class="modal" id="vid" onclick="if(event.target.id==='vid')closeVideo()">
   <div class="box">
     <button class="x" onclick="closeVideo()" aria-label="Close">×</button>
@@ -333,11 +338,45 @@ const MAP = [
   ['application','application'], ['site','site_location'], ['start','start_date'],
   ['topic','prior_topic'], ['next','next_best_step'], ['demo','demo_mode']
 ];
+/* utm_content -> the exact opening line, theme and next step for that creative */
+const CREATIVE = {
+  Post_TurnaroundSchedule: {
+    greeting:"Welcome over from LinkedIn. You were looking at keeping heat treatment on schedule during turnarounds. Want a walkthrough of how SmartCenter™ runs cycles remotely, or should we check fit for an upcoming outage?",
+    topic:"keeping heat treatment on schedule during turnarounds", next:"scope_job", work:"turnaround" },
+  DM_Turnaround_v1: {
+    greeting:"Thanks for following up on our turnaround message. Is there an outage coming up you're planning heat treatment for?",
+    topic:"planning heat treatment around an upcoming outage", next:"scope_job", work:"turnaround" },
+  Post_RemoteOperation: {
+    greeting:"Welcome from LinkedIn. You were reading about remote-controlled heat treatment for planned maintenance. Want to see how it reduces field labour on your next job?",
+    topic:"remote-controlled heat treatment that cuts field labour on planned maintenance", next:"see_smartcenter", work:"maintenance" },
+  DM_Maintenance_v1: {
+    greeting:"Thanks for picking up our maintenance message. What does your routine heat treatment usually involve: PWHT, preheat, or something else?",
+    topic:"routine maintenance heat treatment - PWHT and preheat", next:"scope_job", work:"maintenance" },
+  Post_QAPackage: {
+    greeting:"Welcome from LinkedIn. You were looking at turnkey heat treatment with QA built in. Want to see what a SmartReport™ package contains, or talk through scoping a job?",
+    topic:"turnkey heat treatment with QA built in, including the SmartReport package", next:"request_quote", work:"" },
+  DM_QA_v1: {
+    greeting:"Thanks for following up on our message. Are you scoping a specific job, or comparing providers?",
+    topic:"comparing providers and scoping a job with QA documentation", next:"request_quote", work:"" }
+};
 function buildContext(extra){
   const ctx = {};
   MAP.forEach(([p,f]) => { const v = g(p); if (v) ctx[f] = v; });
+  const c = CREATIVE[g('utm_content')];
+  if (c){
+    ctx.campaign_greeting = c.greeting;
+    if (!ctx.prior_topic) ctx.prior_topic = c.topic;
+    if (!ctx.next_best_step) ctx.next_best_step = c.next;
+    if (!ctx.work_type && c.work) ctx.work_type = c.work;
+  }
   if (extra) ctx.visitor_question = extra;
   return ctx;
+}
+function resetSession(){
+  try{ if (window.AISeller && typeof window.AISeller.resetContext === 'function') window.AISeller.resetContext(); }catch(e){}
+  try{ if (window.AISeller && typeof window.AISeller.hideAndDisconnect === 'function') window.AISeller.hideAndDisconnect(); }catch(e){}
+  try{ localStorage.clear(); sessionStorage.clear(); }catch(e){}
+  location.reload();
 }
 async function waitFor(method, ms=20000){
   const t0 = Date.now();
